@@ -11,15 +11,7 @@ mvvm封装demo,基本架空viewmodel，可从视图层直接调用泛型指定�
  sendData("tag", response);  来发送数据
 
  视图层监听
- viewModel.getmRespository().getResponse().observe(this, new Observer<ResponseModel>() {
-            @Override
-            public void onChanged(@Nullable ResponseModel responseModel) {
-                if (responseModel.tag.equals("tag")) {
-                   //更新视图
-                }else if(responseModel.tag.equals("tag1")){
-                  //更新视图
-            }
-        });
+ 重写onDataChage(ResponseModel response)方法进行数据接收，从response中的tag值区分不同接口
 
 
 ![Image text](https://github.com/YuedongMa/MVVM/blob/master/img/demo.jpg)
