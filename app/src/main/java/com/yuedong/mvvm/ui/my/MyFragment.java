@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import com.yuedong.mvvm.R;
 import com.yuedong.mvvm.base.BaseFrament;
 import com.yuedong.mvvm.base.state.LoadingState;
+import com.yuedong.mvvm.model.ResponseModel;
 
 import butterknife.BindView;
 
@@ -20,6 +21,11 @@ LinearLayout fm;
     @Override
     protected int initLayout(Bundle bundle) {
         return R.layout.fragment_my;
+    }
+
+    @Override
+    protected void onDataChage(ResponseModel response) {
+
     }
 
     @Override

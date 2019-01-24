@@ -13,8 +13,8 @@ import com.yuedong.mvvm.viewmodel.repository.HomeFRepository;
  * 作者：Yuedong Ma
  * 2019/1/17 10:19
  */
-public class MainViewModel extends BaseViewModel<HomeFRepository> {
-    public MainViewModel(@NonNull Application application) {
+public class HomeFViewModel extends BaseViewModel<HomeFRepository> {
+    public HomeFViewModel(@NonNull Application application) {
         super(application);
     }
 

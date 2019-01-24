@@ -12,6 +12,8 @@ import com.yuedong.base.util.ToastUtil;
 import com.yuedong.mvvm.model.ErrorModel;
 import com.yuedong.mvvm.base.state.ErrorState;
 import com.yuedong.mvvm.base.state.LoadingState;
+import com.yuedong.mvvm.model.ResponseModel;
+import com.yuedong.mvvm.ui.home.HomeFragment;
 import com.yuedong.view.stateview.BaseStateControl;
 import com.yuedong.view.stateview.LoadManager;
 
@@ -41,14 +43,7 @@ public abstract class BaseActivity<VM extends BaseViewModel> extends SupperActiv
 
         }
         initData(bundle);
-        if (null != viewModel)
-            viewModel.getErrorModle().observe(this, new Observer<ErrorModel>() {
-                @Override
-                public void onChanged(@Nullable ErrorModel errorModle) {
-                    ToastUtil.showToast(BaseActivity.this.getClass().getSimpleName()+"通用error处理=>"+errorModle.errorMsg);
-
-                }
-            });
+        registerObserve();
     }
 
     protected abstract void initData(Bundle bundle);
@@ -56,6 +51,25 @@ public abstract class BaseActivity<VM extends BaseViewModel> extends SupperActiv
     @Override
     public void netTry(Bundle bundle) {
 
+    }
+
+    private void registerObserve() {
+        if (null != viewModel)
+            viewModel.getErrorModle().observe(this, new Observer<ErrorModel>() {
+                @Override
+                public void onChanged(@Nullable ErrorModel errorModle) {
+                    onError(errorModle);
+                    ToastUtil.showToast(BaseActivity.this.getClass().getSimpleName() + "通用error处理=>" + errorModle.errorMsg);
+
+                }
+            });
+        if (null != viewModel)
+            viewModel.getmRespository().getResponse().observe(this, new Observer<ResponseModel>() {
+                @Override
+                public void onChanged(@Nullable ResponseModel responseModel) {
+                    onDataChage(responseModel);
+                }
+            });
     }
 
     protected void registerStateView(View view) {//此view为添加状态布局的容器
@@ -66,8 +80,17 @@ public abstract class BaseActivity<VM extends BaseViewModel> extends SupperActiv
             }
         }).build();
     }
+//子类重写改该方法获取数据
+    protected abstract void onDataChage(ResponseModel response) ;
 
-    protected void onStateRefresh(){};
+    protected void onError(ErrorModel error) {
+
+    }
+
+    protected void onStateRefresh() {
+    }
+
+    ;
 
     protected void showError(Class<? extends BaseStateControl> stateView, Object tag) {
         if (null != loadManager) loadManager.showStateView(stateView, tag);

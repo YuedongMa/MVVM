@@ -13,6 +13,7 @@ import com.yuedong.base.util.ClassUtil;
 import com.yuedong.base.util.ToastUtil;
 import com.yuedong.mvvm.R;
 import com.yuedong.mvvm.model.ErrorModel;
+import com.yuedong.mvvm.model.ResponseModel;
 import com.yuedong.mvvm.ui.home.HomeFragment;
 import com.yuedong.mvvm.base.state.ErrorState;
 import com.yuedong.mvvm.base.state.LoadingState;
@@ -33,9 +34,7 @@ public abstract class BaseFrament<VM extends BaseViewModel> extends SupperFragme
     protected VM viewModel;
     protected Unbinder unbinder;
     private SupperActivity activity;
-    protected List<BaseStateControl> stateControlList;
     protected LoadManager loadManager;
-    private List<Object> eventKeys = new ArrayList<>();
 
     protected VM vmProvider(SupperFragment fragment, Class<VM> vmClass) {
         return ViewModelProviders.of(fragment).get(vmClass);
@@ -43,9 +42,6 @@ public abstract class BaseFrament<VM extends BaseViewModel> extends SupperFragme
 
     @Override
     protected void initSupperData(Bundle bundle, View view) {
-        stateControlList = new ArrayList<>();
-        stateControlList.add(new LoadingState());
-        stateControlList.add(new ErrorState());
         try {
             unbinder = ButterKnife.bind(this, view);
             viewModel = getViewModel();//子类可重写该方法来决定是否监听其依托的activity的viewmodle
@@ -56,10 +52,21 @@ public abstract class BaseFrament<VM extends BaseViewModel> extends SupperFragme
 
         }
         initData(bundle);
+        registerObserve();
+    }
+
+
+
+    //子类可重写此方法是否监听其依托的activity的viewmodel
+    protected VM getViewModel() {
+        return viewModel;
+    }
+    private void registerObserve() {
         if (null != viewModel)
             viewModel.getErrorModle().observe(this, new Observer<ErrorModel>() {
                 @Override
                 public void onChanged(@Nullable ErrorModel errorModle) {
+                    onError(errorModle);
                     if (errorModle.code == HomeFragment.class.hashCode()) {
                         //  showLoading();
                         ToastUtil.showToast("针对来自 HomeFrament error 的特殊处理");
@@ -68,12 +75,14 @@ public abstract class BaseFrament<VM extends BaseViewModel> extends SupperFragme
                     }
                 }
             });
+        if (null != viewModel)
+            viewModel.getmRespository().getResponse().observe(this, new Observer<ResponseModel>() {
+                @Override
+                public void onChanged(@Nullable ResponseModel responseModel) {
+                    onDataChage(responseModel);
+                }
+            });
     }
-
-    protected VM getViewModel() {
-        return viewModel;
-    }
-
     protected void registerStateView(View view) {//此view为添加状态布局的容器
         loadManager = new LoadManager.Builder().setViewParams(view).setListener(new BaseStateControl.OnRefreshListener() {
             @Override
@@ -81,6 +90,12 @@ public abstract class BaseFrament<VM extends BaseViewModel> extends SupperFragme
                 onStateRefresh();
             }
         }).build();
+    }
+
+    protected abstract void onDataChage(ResponseModel response);
+
+    protected void onError(ErrorModel error) {
+
     }
 
     protected void onStateRefresh() {

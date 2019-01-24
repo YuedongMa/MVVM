@@ -15,7 +15,7 @@ import com.yuedong.mvvm.base.BaseFrament;
 import com.yuedong.mvvm.base.state.LoadingState;
 import com.yuedong.mvvm.model.ResponseModel;
 import com.yuedong.mvvm.model.VersionBean;
-import com.yuedong.mvvm.viewmodel.MainViewModel;
+import com.yuedong.mvvm.viewmodel.HomeFViewModel;
 import com.yuedong.view.stateview.SuccessState;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends BaseFrament<MainViewModel> {
+public class HomeFragment extends BaseFrament<HomeFViewModel> {
     @BindView(R.id.tvVer)
     TextView tvVer;
     @BindView(R.id.lcontainer)
@@ -47,24 +47,24 @@ public class HomeFragment extends BaseFrament<MainViewModel> {
     protected void initData(Bundle bundle) {
         registerStateView(lcontainer);//测试状态view
         showError("2");
-        viewModel.getmRespository().getResponse().observe(this, new Observer<ResponseModel>() {
-            @Override
-            public void onChanged(@Nullable ResponseModel responseModel) {
-                if (responseModel.tag.equals("a")) {
-                    tvA.setText(responseModel.data.toString());
-                } else if (responseModel.tag.equals("b")) {
-                    tvB.setText(responseModel.data.toString());
-                } else if (responseModel.tag.equals("version")) {
-                    tvVer.setText("来自改造后版本更新返回的数据==》" + responseModel.data.toString());
-                }
-            }
-        });
+
 
     }
 
     @Override
-    protected MainViewModel getViewModel() {
-        return ViewModelProviders.of(this).get(MainViewModel.class);
+    protected void onDataChage(ResponseModel responseModel) {
+        if (responseModel.tag.equals("a")) {
+            tvA.setText(responseModel.data.toString());
+        } else if (responseModel.tag.equals("b")) {
+            tvB.setText(responseModel.data.toString());
+        } else if (responseModel.tag.equals("version")) {
+            tvVer.setText("来自改造后版本更新返回的数据==》" + responseModel.data.toString());
+        }
+    }
+
+    @Override
+    protected HomeFViewModel getViewModel() {
+        return ViewModelProviders.of(this).get(HomeFViewModel.class);
     }
 
     @Override

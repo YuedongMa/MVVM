@@ -1,23 +1,28 @@
 package com.yuedong.mvvm;
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.yuedong.base.util.ToastUtil;
 import com.yuedong.down.DownLoadManager;
 import com.yuedong.mvvm.base.BaseActivity;
+import com.yuedong.mvvm.model.ResponseModel;
+import com.yuedong.mvvm.model.VersionBean;
 import com.yuedong.mvvm.ui.home.HomeFragment;
 import com.yuedong.mvvm.ui.home.adapter.SlideFragmentAdapter;
 import com.yuedong.mvvm.ui.message.MessageFragment;
 import com.yuedong.mvvm.ui.my.MyFragment;
+import com.yuedong.mvvm.viewmodel.HomeFViewModel;
 import com.yuedong.view.bottombar.W_BottomBar;
 import com.yuedong.view.bottombar.W_BottomBarTab;
 import com.yuedong.view.bottombar.W_ViewPager;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<HomeFViewModel> {
 
     private static final int TIME_INTERVAL = 2000;
     private long mBackPressed;
@@ -62,6 +67,11 @@ public class MainActivity extends BaseActivity {
     public void netTry(Bundle bundle) {
         super.netTry(bundle);
        // viewModel.getVersion().setValue(new VersionBean());
+    }
+
+    @Override
+    protected void onDataChage(ResponseModel response) {
+        ToastUtil.showToast("MainActivity");
     }
 
     @Override

@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.LinearLayout;
 
+import com.yuedong.base.util.ToastUtil;
 import com.yuedong.mvvm.R;
 import com.yuedong.mvvm.base.BaseFrament;
 import com.yuedong.mvvm.base.state.LoadingState;
+import com.yuedong.mvvm.model.ResponseModel;
 
 import butterknife.BindView;
 
@@ -24,10 +26,16 @@ public class MessageFragment extends BaseFrament {
     }
 
     @Override
+    protected void onDataChage(ResponseModel response) {
+ToastUtil.showToast("MessageFragment");
+    }
+
+    @Override
     protected void initData(Bundle bundle) {
             registerStateView(fl);
           showError("d");
 
 
     }
+
 }

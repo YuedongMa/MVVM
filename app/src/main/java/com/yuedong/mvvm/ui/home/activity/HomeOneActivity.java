@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.yuedong.mvvm.R;
 import com.yuedong.mvvm.base.BaseActivity;
 
+import com.yuedong.mvvm.model.ResponseModel;
 import com.yuedong.view.button.buttonstyle.ButtonStyle;
 
 import butterknife.BindView;
@@ -33,6 +34,11 @@ public class HomeOneActivity extends BaseActivity {
 //                tvText.setText(versionBean.toString());
 //            }
 //        });
+    }
+
+    @Override
+    protected void onDataChage(ResponseModel response) {
+
     }
 
     @OnClick({R.id.btUpDate})
