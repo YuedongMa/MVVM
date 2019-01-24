@@ -1,0 +1,2 @@
+# MVVM
+mvvm封装demo,基本架空viewmodel但保留了viewmodel数据恢复的特性
